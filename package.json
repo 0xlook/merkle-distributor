@@ -41,8 +41,13 @@
     "compile": "waffle",
     "pretest": "yarn compile",
     "test": "mocha",
+    "csv-to-json": "ts-node scripts/csv-to-json.ts",
     "generate-merkle-root": "ts-node scripts/generate-merkle-root.ts",
     "generate-merkle-root:example": "ts-node scripts/generate-merkle-root.ts --input scripts/example.json",
     "prepublishOnly": "yarn test"
+  },
+  "dependencies": {
+    "bignumber.js": "^9.0.1",
+    "csv-parser": "^3.0.0"
   }
 }
