@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity =0.6.11;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/cryptography/MerkleProof.sol";
-import "./interfaces/IMerkleDistributor.sol";
+import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import '@openzeppelin/contracts/access/Ownable.sol';
+import '@openzeppelin/contracts/cryptography/MerkleProof.sol';
+import './interfaces/IMerkleDistributor.sol';
 
-contract MerkleDistributor is IMerkleDistributor {
+contract MerkleDistributor is Ownable, IMerkleDistributor {
     address public immutable override token;
     bytes32 public immutable override merkleRoot;
 
@@ -31,7 +32,12 @@ contract MerkleDistributor is IMerkleDistributor {
         claimedBitMap[claimedWordIndex] = claimedBitMap[claimedWordIndex] | (1 << claimedBitIndex);
     }
 
-    function claim(uint256 index, address account, uint256 amount, bytes32[] calldata merkleProof) external override {
+    function claim(
+        uint256 index,
+        address account,
+        uint256 amount,
+        bytes32[] calldata merkleProof
+    ) external override {
         require(!isClaimed(index), 'MerkleDistributor: Drop already claimed.');
 
         // Verify the merkle proof.
@@ -43,5 +49,12 @@ contract MerkleDistributor is IMerkleDistributor {
         require(IERC20(token).transfer(account, amount), 'MerkleDistributor: Transfer failed.');
 
         emit Claimed(index, account, amount);
+    }
+
+    function recoverToken(address receiver) external onlyOwner {
+        require(
+            IERC20(token).transfer(receiver, IERC20(token).balanceOf(address(this))),
+            'MerkleDistributor: Transfer failed.'
+        );
     }
 }
