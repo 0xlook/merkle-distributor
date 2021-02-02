@@ -20,7 +20,7 @@ module.exports = {
         return new HDWalletProvider(privateKey, 'wss://mainnet.infura.io/ws/v3/8baf9b19ef5f4aa8b3c1f355794baeb1')
       },
       network_id: 1,
-      gasPrice: 120e9,
+      gasPrice: 80e9,
       from: publicKey,
       gas: 2e6,
     },

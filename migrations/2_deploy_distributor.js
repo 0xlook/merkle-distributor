@@ -1,5 +1,5 @@
-const MerkleDistributor = artifacts.require('MerkleDistributor')
+const LightMint = artifacts.require('LightMint')
 
 module.exports = function (deployer) {
-  deployer.deploy(MerkleDistributor)
+  deployer.deploy(LightMint)
 }
